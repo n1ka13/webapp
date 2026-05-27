@@ -1,0 +1,78 @@
+---
+- name: Ensure target execution engines for Node runtimes and proxies are deployed
+  apt:
+    name:
+      - nodejs
+      - npm
+      - nginx
+      - git
+    state: present
+    update_cache: yes
+
+- name: Establish completely isolated unprivileged app run daemon target system entity
+  user:
+    name: app
+    system: yes
+    shell: /usr/sbin/nologin
+
+- name: Populate restricted engineering operator staff account identities
+  user:
+    name: operator
+    shell: /bin/bash
+    password: "{{ '12345678' | password_hash('sha512') }}"
+
+- name: Deliver granular restricted sudo privilege descriptors to operators
+  template:
+    src: operator_sudoers.j2
+    dest: /etc/sudoers.d/operator
+    mode: '0440'
+
+- name: Deploy application source directory architectures directly to working targets
+  copy:
+    src: ../../../webapp/
+    dest: /opt/mywebapp/
+    owner: app
+    group: app
+
+- name: Run local node system tracking library installation metrics mapping
+  npm:
+    path: /opt/mywebapp
+
+- name: Deploy tailored platform configuration manifest maps into tracking system services
+  template:
+    src: mywebapp.service.j2
+    dest: /etc/systemd/system/mywebapp.service
+  notify: restart mywebapp
+
+- name: Establish reverse proxy routing paths within web proxy servers
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify: restart nginx
+
+- name: Align background active status configurations across internal application pools
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  loop:
+    - mywebapp
+    - nginx
+
+- name: Unblock perimeter public access boundaries over standard port targets
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+
+- name: Initialize active system firewall rules
+  ufw:
+    state: enabled
+    policy: deny
+
+- name: Safeguard remote administration transport interfaces for validation operations
+  ufw:
+    rule: allow
+    port: '22'
+    proto: tcp

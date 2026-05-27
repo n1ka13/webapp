@@ -1,0 +1,22 @@
+---
+- name: Set up the unprivileged execution student profile target workspace
+  user:
+    name: student
+    shell: /bin/bash
+    create_home: yes
+
+- name: Register administrative teacher profiles with baseline evaluation parameters
+  user:
+    name: teacher
+    shell: /bin/bash
+    password: "{{ '12345678' | password_hash('sha512') }}"
+    groups: sudo
+    append: yes
+
+- name: Deliver immutable assessment tracking file validating variant assignment
+  copy:
+    dest: /home/student/gradebook
+    content: "10\n"
+    owner: student
+    group: student
+    mode: '0644'

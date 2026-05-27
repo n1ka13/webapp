@@ -132,13 +132,14 @@ output "db_ip" {
   value = libvirt_domain.db.network_interface[0].addresses[0]
 }
 
+# Fully automated declarative generation of inventory.ini with precise explicit parameter mappings
 resource "local_file" "ansible_inventory" {
   content  = <<EOT
 [workers]
-worker ansible_host=${libvirt_domain.worker.network_interface[0].addresses[0]}
+worker ansible_host=${libvirt_domain.worker.network_interface[0].addresses[0]} ansible_user=ansible ansible_ssh_private_key_file=ansible_id_rsa
 
 [db]
-db ansible_host=${libvirt_domain.db.network_interface[0].addresses[0]}
+db ansible_host=${libvirt_domain.db.network_interface[0].addresses[0]} ansible_user=ansible ansible_ssh_private_key_file=ansible_id_rsa
 EOT
   filename = "${path.module}/../ansible/inventory.ini"
 }

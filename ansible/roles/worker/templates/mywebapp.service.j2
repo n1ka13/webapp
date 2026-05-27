@@ -1,0 +1,16 @@
+[Unit]
+Description=Notes Service Backend Processing Runtime Environment
+After=network.target
+
+[Service]
+Type=simple
+User=app
+WorkingDirectory=/opt/mywebapp
+# Auto-apply database table structures prior to launching software loops
+ExecStartPre=/usr/bin/node /opt/mywebapp/migrations.js --db-host={{ hostvars['db']['ansible_host'] }} --db-user=webapp_user --db-pass=password --db-name=mywebapp_db
+# Boot processing thread passing parameters directly to process argv configurations
+ExecStart=/usr/bin/node /opt/mywebapp/server.js --db-host={{ hostvars['db']['ansible_host'] }} --db-user=webapp_user --db-pass=password --db-name=mywebapp_db --port=8080
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

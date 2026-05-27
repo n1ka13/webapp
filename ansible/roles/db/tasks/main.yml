@@ -1,0 +1,54 @@
+---
+- name: Install MariaDB database binaries along with system bindings
+  apt:
+    name:
+      - mariadb-server
+      - python3-pymysql
+    state: present
+    update_cache: yes
+
+- name: Unbind the default local interface constraint to span processing grids
+  lineinfile:
+    path: /etc/mysql/mariadb.conf.d/50-server.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+  notify: restart mariadb
+
+- name: Ensure standard relational database server engine is activated
+  systemd:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Build the explicit target application microservice relational namespace
+  community.mysql.mysql_db:
+    name: mywebapp_db
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Enforce granular network authentication profile mapping strictly to worker nodes
+  community.mysql.mysql_user:
+    name: webapp_user
+    password: password
+    priv: 'mywebapp_db.*:ALL'
+    host: "{{ hostvars['worker']['ansible_host'] }}"
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Restrict database connectivity exclusively to worker node originations via UFW
+  ufw:
+    rule: allow
+    src: "{{ hostvars['worker']['ansible_host'] }}"
+    port: '3306'
+    proto: tcp
+
+- name: Lock down server environment using host boundary inspection layers
+  ufw:
+    state: enabled
+    policy: deny
+
+- name: Maintain essential active tunnels supporting remote SSH diagnostics
+  ufw:
+    rule: allow
+    port: '22'
+    proto: tcp
