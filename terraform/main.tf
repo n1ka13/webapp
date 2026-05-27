@@ -84,6 +84,7 @@ resource "libvirt_domain" "worker" {
 
   disk {
     volume_id = libvirt_volume.worker_disk.id
+    bus       = "virtio"
   }
 
   console {
@@ -93,7 +94,13 @@ resource "libvirt_domain" "worker" {
   }
 
   graphics {
-    type = "spice"
+    type        = "spice"
+    listen_type = "address"
+    autoport    = true
+  }
+
+  video {
+    type = "virtio"
   }
 }
 
@@ -113,6 +120,7 @@ resource "libvirt_domain" "db" {
 
   disk {
     volume_id = libvirt_volume.db_disk.id
+    bus       = "virtio"
   }
 
   console {
@@ -122,7 +130,13 @@ resource "libvirt_domain" "db" {
   }
 
   graphics {
-    type = "spice"
+    type        = "spice"
+    listen_type = "address"
+    autoport    = true
+  }
+
+  video {
+    type = "virtio"
   }
 }
 
