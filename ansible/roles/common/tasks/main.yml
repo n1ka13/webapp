@@ -20,3 +20,11 @@
     owner: student
     group: student
     mode: '0644'
+
+- name: Enable Password Authentication for teacher and operator SSH access
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication yes'
+    validate: 'sshd -t -f %s'
+  notify: restart sshd

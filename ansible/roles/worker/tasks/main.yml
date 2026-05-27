@@ -29,7 +29,7 @@
 
 - name: Deploy application source directory architectures directly to working targets
   copy:
-    src: ../../../webapp/
+    src: ../../../app/
     dest: /opt/mywebapp/
     owner: app
     group: app
