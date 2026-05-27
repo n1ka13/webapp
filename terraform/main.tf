@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/tls"
       version = "~> 4.0"
     }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.5"
+    }
   }
 }
 
@@ -84,7 +88,6 @@ resource "libvirt_domain" "worker" {
 
   disk {
     volume_id = libvirt_volume.worker_disk.id
-    bus       = "virtio"
   }
 
   console {
@@ -120,7 +123,6 @@ resource "libvirt_domain" "db" {
 
   disk {
     volume_id = libvirt_volume.db_disk.id
-    bus       = "virtio"
   }
 
   console {
