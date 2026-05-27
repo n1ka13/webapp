@@ -31,7 +31,7 @@ resource "local_sensitive_file" "ansible_private_key" {
 resource "libvirt_volume" "ubuntu_base" {
   name   = "ubuntu-base.qcow2"
   pool   = "default"
-  source = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img"
+  source = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-arm64.img"
   format = "qcow2"
 }
 
@@ -72,7 +72,8 @@ resource "libvirt_domain" "worker" {
   memory   = "2048"
   vcpu     = 2
   type     = "qemu"
-  emulator = "/usr/bin/qemu-system-x86_64"
+  arch     = "aarch64"
+  emulator = "/usr/bin/qemu-system-aarch64"
 
   cloudinit = libvirt_cloudinit_disk.worker_init.id
 
@@ -101,7 +102,8 @@ resource "libvirt_domain" "db" {
   memory   = "2048"
   vcpu     = 2
   type     = "qemu"
-  emulator = "/usr/bin/qemu-system-x86_64"
+  arch     = "aarch64"
+  emulator = "/usr/bin/qemu-system-aarch64"
   cloudinit = libvirt_cloudinit_disk.db_init.id
 
   network_interface {

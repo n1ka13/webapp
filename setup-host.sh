@@ -4,7 +4,7 @@ set -e
 
 sudo apt update && sudo apt upgrade -y
 
-sudo apt install -y qemu-system-x86 libvirt-daemon-system libvirt-clients bridge-utils virtinst
+sudo apt install -y qemu-system-arm qemu-efi-aarch64 libvirt-daemon-system libvirt-clients bridge-utils virtinst
 
 sudo systemctl enable --now libvirtd
 
